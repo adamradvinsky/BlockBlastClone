@@ -27,7 +27,6 @@ public class shape : MonoBehaviour
 
     void OnMouseDrag()
     {
-
         Vector2 drag_position= Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = drag_position;
     }
