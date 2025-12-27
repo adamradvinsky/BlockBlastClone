@@ -16,12 +16,7 @@ public class tileScript : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        block[2] = new int[] { 1, 0 };
-        block[1] = new int[] { 1, 1 };
-        block[0] = new int[] { 1, 0 };
-
-
-
+        spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public void setX(int num)
@@ -34,22 +29,25 @@ public class tileScript : MonoBehaviour
         y = num;
     }
 
-    public void setColour()
+    public void setColour(Color color)
     {
 
-        spriteRenderer.color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+        spriteRenderer.color = color;
     }
 
     public void setOtherColour()
     {
 
-        //        spriteRenderer.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+        spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     void OnMouseDown()
     {
+
         // want to place block down at this position
         gridManager.placeAble(x, y, block);
+
+
 
     }
 
@@ -57,7 +55,14 @@ public class tileScript : MonoBehaviour
 
     void OnMouseOver()
     {
-        // change colour to test
+
+        if (gridManager.shape != GridManager.typeShape.nothing)
+        {
+            gridManager.hovering(x, y);
+
+        }
 
     }
+
+
 }

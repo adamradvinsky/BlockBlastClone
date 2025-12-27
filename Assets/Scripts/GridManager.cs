@@ -15,13 +15,38 @@ public class GridManager : MonoBehaviour
 
     public int[,] grid;
     public GameObject[,] gameGrid;
+    private int[][] block = new int[3][];
+    private int[][] prevBlock = new int[3][];
 
+
+    public enum typeShape
+    {
+        tetris,
+        L,
+        plus,
+        nothing
+    }
+
+
+    public typeShape shape;
 
     void Start()
     {
+
+
+        prevBlock[0] = new int[] { 0, 0, 0 };
+
+        prevBlock[1] = new int[] { 0, 0, 0 };
+
+        prevBlock[2] = new int[] { 0, 0, 0 };
+
+
+
         grid = new int[radius, radius];
         gameGrid = new GameObject[radius, radius];
 
+
+        shape = typeShape.nothing;
         // goes down
         for (int j = 0; j < radius; j++)
         {
@@ -41,6 +66,21 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void setBlock(int[][] shapeGrid, typeShape type)
+    {
+        shape = type;
+
+        for (int i = 0; i < 3; i++)
+        {
+            block[i] = new int[3];
+            for (int j = 0; j < 3; j++)
+            {
+                prevBlock[i][j] = 0;
+                block[i][j] = shapeGrid[i][j];
+            }
+        }
+    }
+
     public void placeAble(int x, int y, int[][] block)
     {
         bool good = true;
@@ -50,18 +90,10 @@ public class GridManager : MonoBehaviour
             // prints right
             for (int i = 0; i < block[1].Length; i++)
             {
-
-                if (x + i >= radius || y - j >= radius)
-                {
-                    Debug.Log("thatas out of the area dumbass");
-                }
-                else if (block[j][i] == 1 && grid[x + i, y - j] != 0)
+                if (block[j][i] == 1 && grid[x + i, y - j] != 0)
                 {
                     good = false;
-
                 }
-
-
             }
         }
 
@@ -79,6 +111,63 @@ public class GridManager : MonoBehaviour
     }
 
 
+    int prevX = 0;
+    int prevY = 0;
+
+    public void hovering(int x, int y)
+    {
+
+        if (prevX == x && prevY == y)
+        {
+
+            // set prevblock to the block thats currently active
+            for (int i = 0; i < 3; i++)
+            {
+                prevBlock[i] = new int[3];
+                for (int j = 0; j < 3; j++)
+                {
+                    prevBlock[i][j] = block[i][j];
+                }
+            }
+            return;
+        }
+
+        // delete prev thing
+        draw(prevX, prevY, prevBlock, new Color(1.0f, 1.0f, 1.0f, 1.0f));
+
+        // draw new thing
+        draw( x, y, prevBlock, new Color(1.0f, 0f, 0f, 1.0f));
+
+
+        // what if at start calculates which tiles to draw and which to make white
+        
+        // creates an array that takes up entire space of old place and new place 
+        // and calculates which ones to clean up and which to turn white
+        prevX = x;
+        prevY = y;
+
+    }
+
+    private void draw(int x, int y, int[][] block, Color color)
+    {
+        for (int j = 0; j < block.Length; j++)
+        {
+            // prints right
+            for (int i = 0; i < block[1].Length; i++)
+            {
+                if (block[j][i] == 1)
+                {
+                    // prev block is white
+                    gameGrid[x + i, y - j].GetComponent<tileScript>().setColour(color);
+                }
+
+
+            }
+        }
+    }
+
+
+
 
     private void setTile(int x, int y, int[][] block)
     {
@@ -89,7 +178,7 @@ public class GridManager : MonoBehaviour
             {
                 if (block[j][i] == 1)
                 {
-                    gameGrid[x + i, y - j].GetComponent<tileScript>().setColour();
+                    gameGrid[x + i, y - j].GetComponent<tileScript>().setColour(new Color(1.0f, 1.0f, 1.0f, 1.0f));
                     grid[x + i, y - j] = 1;
                 }
             }
