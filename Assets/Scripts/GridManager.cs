@@ -47,6 +47,8 @@ public class GridManager : MonoBehaviour
 
 
         shape = typeShape.nothing;
+
+
         // goes down
         for (int j = 0; j < radius; j++)
         {
@@ -70,20 +72,19 @@ public class GridManager : MonoBehaviour
     {
         shape = type;
 
-        for (int i = 0; i < 3; i++)
-        {
-            block[i] = new int[3];
-            for (int j = 0; j < 3; j++)
-            {
-                prevBlock[i][j] = 0;
-                block[i][j] = shapeGrid[i][j];
-            }
-        }
+        equalArray(block, shapeGrid, 3);
     }
 
     public void placeAble(int x, int y, int[][] block)
     {
+
+
         bool good = true;
+
+        if (x + 3 > radius || y + 3 > radius)
+        {
+            return;
+        }
 
         for (int j = 0; j < block.Length; j++)
         {
@@ -119,16 +120,10 @@ public class GridManager : MonoBehaviour
 
         if (prevX == x && prevY == y)
         {
-
             // set prevblock to the block thats currently active
-            for (int i = 0; i < 3; i++)
-            {
-                prevBlock[i] = new int[3];
-                for (int j = 0; j < 3; j++)
-                {
-                    prevBlock[i][j] = block[i][j];
-                }
-            }
+
+            equalArray(prevBlock, block, 3);
+
             return;
         }
 
@@ -136,11 +131,11 @@ public class GridManager : MonoBehaviour
         draw(prevX, prevY, prevBlock, new Color(1.0f, 1.0f, 1.0f, 1.0f));
 
         // draw new thing
-        draw( x, y, prevBlock, new Color(1.0f, 0f, 0f, 1.0f));
+        draw(x, y, prevBlock, new Color(1.0f, 0f, 0f, 1.0f));
 
 
         // what if at start calculates which tiles to draw and which to make white
-        
+
         // creates an array that takes up entire space of old place and new place 
         // and calculates which ones to clean up and which to turn white
         prevX = x;
@@ -162,6 +157,18 @@ public class GridManager : MonoBehaviour
                 }
 
 
+            }
+        }
+    }
+
+    private void equalArray(int[][] a, int[][] b, int len)
+    {
+        for (int i = 0; i < len; i++)
+        {
+            a[i] = new int[len];
+            for (int j = 0; j < len; j++)
+            {
+                a[i][j] = b[i][j];
             }
         }
     }
