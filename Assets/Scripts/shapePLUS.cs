@@ -1,10 +1,6 @@
-using System;
-using System.Linq.Expressions;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class shape : MonoBehaviour
+public class shapePLUS : MonoBehaviour
 {
     public GridManager grid;
 
@@ -14,12 +10,12 @@ public class shape : MonoBehaviour
 
     Vector2Int[] block = new Vector2Int[]
     {
-        // collumn : row
-        new Vector2Int(0, 0),
+        // row : collumn
+        new Vector2Int(1, 0),
         new Vector2Int(0, 1),
-        new Vector2Int(0, 2),
+        new Vector2Int(1, 1),
+        new Vector2Int(2, 1),
         new Vector2Int(1, 2),
-        new Vector2Int(2, 2),
     };
 
     public Vector2 startPos;
@@ -29,7 +25,7 @@ public class shape : MonoBehaviour
     void Start()
     {
         tileSize = 1f;
-        gridOrigin = grid.tiles[0,0].transform.position;
+        gridOrigin = grid.tiles[0, 0].transform.position;
     }
 
     void OnMouseDrag()
@@ -59,5 +55,4 @@ public class shape : MonoBehaviour
 
         return new Vector2Int(x, y);
     }
-
 }

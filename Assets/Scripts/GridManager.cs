@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GridManager : MonoBehaviour
 {
@@ -18,10 +20,13 @@ public class GridManager : MonoBehaviour
     public float tiley;
     public Vector2 gridOrigin;
 
+
+    private int score = 0;
+
     void Start()
     {
 
-        //startPos = transform.position;
+        startPos = transform.position;
         grid = new int[width, height];
         tiles = new TileScript[width, height];
         tilex = tilePrefab.transform.localScale.x;
@@ -58,7 +63,16 @@ public class GridManager : MonoBehaviour
 
         activeShape = shape;
         bool canPlace = CanPlace(gridPos, shape);
-        Color color = canPlace ? Color.green : Color.red;
+        Color color;
+
+        if (canPlace)
+        {
+            color = Color.green;
+        }
+        else
+        {
+            return;
+        }
 
         foreach (Vector2Int offset in shape)
         {
@@ -87,7 +101,92 @@ public class GridManager : MonoBehaviour
             grid[p.x, p.y] = 1;
             tiles[p.x, p.y].SetColor(Color.blue);
         }
+
+        Debug.Log("SCORE: " + score);
+
+        if (checkAClear() > 0)
+        {
+            Debug.Log("A CLAER");
+        }
     }
+
+
+    private int checkAClear()
+    {
+        int clear = 0;
+
+        // check row
+        for (int i = 0; i < 8; i++)
+        {
+            if (checkRow(i))
+            {
+                clear++;
+            }
+        }
+
+
+        for (int i = 0; i < 8; i++)
+        {
+            if (checkCollumn(i))
+            {
+                clear++;
+            }
+        }
+
+        return clear;
+
+    }
+
+    private bool checkRow(int a)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (grid[a, i] == 0)
+            {
+                return false;
+            }
+        }
+
+        // remove this row
+
+        for (int i = 0; i < 8; i++)
+        {
+            grid[a, i] = 0;
+            tiles[a, i].SetColor(Color.white);
+        }
+
+
+
+
+        return true;
+    }
+
+
+    private bool checkCollumn(int a)
+    {
+
+        for (int i = 0; i < 8; i++)
+        {
+            if (grid[i, a] == 0)
+            {
+                return false;
+            }
+        }
+
+        // remove this collummn
+
+        for (int i = 0; i < 8; i++)
+        {
+            grid[i, a] = 0;
+            tiles[i, a].SetColor(Color.white);
+        }
+        return true;
+    }
+
+
+
+
+
 
     void ClearHover(Vector2Int gridPos, Vector2Int[] shape)
     {
