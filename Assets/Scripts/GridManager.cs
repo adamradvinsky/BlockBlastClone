@@ -1,196 +1,122 @@
-
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public int width = 8;
+    public int height = 8;
 
-
-    public int radius = 8;
-
-    public GameObject tile;
-
-    Vector2 current;
+    public GameObject tilePrefab;
 
     public int[,] grid;
-    public GameObject[,] gameGrid;
-    private int[][] block = new int[3][];
-    private int[][] prevBlock = new int[3][];
+    public TileScript[,] tiles;
 
+    Vector2Int prevHover = new Vector2Int(-1, -1);
+    Vector2Int[] activeShape;
 
-    public enum typeShape
-    {
-        tetris,
-        L,
-        plus,
-        nothing
-    }
-
-
-    public typeShape shape;
+    public Vector2 startPos;
+    public float tilex;
+    public float tiley;
+    public Vector2 gridOrigin;
 
     void Start()
     {
 
+        //startPos = transform.position;
+        grid = new int[width, height];
+        tiles = new TileScript[width, height];
+        tilex = tilePrefab.transform.localScale.x;
+        tiley = tilePrefab.transform.localScale.y;
 
-        prevBlock[0] = new int[] { 0, 0, 0 };
-
-        prevBlock[1] = new int[] { 0, 0, 0 };
-
-        prevBlock[2] = new int[] { 0, 0, 0 };
-
-
-
-        grid = new int[radius, radius];
-        gameGrid = new GameObject[radius, radius];
-
-
-        shape = typeShape.nothing;
-
-
-        // goes down
-        for (int j = 0; j < radius; j++)
+        for (int y = 0; y < height; y++)
         {
-            // prints right
-            for (int i = 0; i < radius; i++)
+            for (int x = 0; x < width; x++)
             {
+                GameObject t = Instantiate(tilePrefab, transform);
+                Vector2 pos = startPos + new Vector2(x * tilex, -y * tiley);
+                t.transform.position = pos;
 
-                gameGrid[i, j] = Instantiate(tile, current, Quaternion.identity);
-                GameObject newTile = gameGrid[i, j];
-                newTile.transform.position = new Vector2(transform.position.x + (newTile.transform.localScale.x * i), transform.position.y - (newTile.transform.localScale.y * j));
-                newTile.GetComponent<tileScript>().setX(i);
-                newTile.GetComponent<tileScript>().setY(j);
+                if (x == 0 && y == 0)
+                    gridOrigin = pos;
 
-                grid[i, j] = 0;
+                TileScript tile = t.GetComponent<TileScript>();
+                tile.Init(x, y);
+
+                tiles[x, y] = tile;
+                grid[x, y] = 0;
+
             }
-
         }
     }
 
-    public void setBlock(int[][] shapeGrid, typeShape type)
+    // Called while dragging
+    public void Hover(Vector2Int gridPos, Vector2Int[] shape)
     {
-        shape = type;
-
-        equalArray(block, shapeGrid, 3);
-    }
-
-    public void placeAble(int x, int y, int[][] block)
-    {
-
-
-        bool good = true;
-
-        if (x + 3 > radius || y + 3 > radius)
-        {
+        if (gridPos == prevHover)
             return;
-        }
 
-        for (int j = 0; j < block.Length; j++)
+        ClearHover(prevHover, shape);
+
+        activeShape = shape;
+        bool canPlace = CanPlace(gridPos, shape);
+        Color color = canPlace ? Color.green : Color.red;
+
+        foreach (Vector2Int offset in shape)
         {
-            // prints right
-            for (int i = 0; i < block[1].Length; i++)
-            {
-                if (block[j][i] == 1 && grid[x + i, y - j] != 0)
-                {
-                    good = false;
-                }
-            }
+            Vector2Int p = gridPos + offset;
+
+            if (!InBounds(p)) continue;
+            if (grid[p.x, p.y] != 0) continue;
+
+            tiles[p.x, p.y].SetColor(color);
         }
 
-
-        if (good)
-        {
-            setTile(x, y, block);
-        }
-        else
-        {
-            // cant place a block
-            Debug.Log("cant place a block there");
-
-        }
+        prevHover = gridPos;
     }
 
-
-    int prevX = 0;
-    int prevY = 0;
-
-    public void hovering(int x, int y)
+    // Called on mouse release
+    public void Place(Vector2Int gridPos)
     {
-
-        if (prevX == x && prevY == y)
-        {
-            // set prevblock to the block thats currently active
-
-            equalArray(prevBlock, block, 3);
-
+        if (!CanPlace(gridPos, activeShape))
             return;
-        }
 
-        // delete prev thing
-        draw(prevX, prevY, prevBlock, new Color(1.0f, 1.0f, 1.0f, 1.0f));
-
-        // draw new thing
-        draw(x, y, prevBlock, new Color(1.0f, 0f, 0f, 1.0f));
-
-
-        // what if at start calculates which tiles to draw and which to make white
-
-        // creates an array that takes up entire space of old place and new place 
-        // and calculates which ones to clean up and which to turn white
-        prevX = x;
-        prevY = y;
-
-    }
-
-    private void draw(int x, int y, int[][] block, Color color)
-    {
-        for (int j = 0; j < block.Length; j++)
+        foreach (Vector2Int offset in activeShape)
         {
-            // prints right
-            for (int i = 0; i < block[1].Length; i++)
-            {
-                if (block[j][i] == 1)
-                {
-                    // prev block is white
-                    gameGrid[x + i, y - j].GetComponent<tileScript>().setColour(color);
-                }
+            Vector2Int p = gridPos + offset;
+            if (!InBounds(p)) continue;
 
-
-            }
+            grid[p.x, p.y] = 1;
+            tiles[p.x, p.y].SetColor(Color.blue);
         }
     }
 
-    private void equalArray(int[][] a, int[][] b, int len)
+    void ClearHover(Vector2Int gridPos, Vector2Int[] shape)
     {
-        for (int i = 0; i < len; i++)
+        if (shape == null) return;
+
+        foreach (Vector2Int offset in shape)
         {
-            a[i] = new int[len];
-            for (int j = 0; j < len; j++)
-            {
-                a[i][j] = b[i][j];
-            }
+            Vector2Int p = gridPos + offset;
+            if (!InBounds(p)) continue;
+
+            if (grid[p.x, p.y] == 0)
+                tiles[p.x, p.y].SetColor(Color.white);
         }
     }
 
-
-
-
-    private void setTile(int x, int y, int[][] block)
+    bool CanPlace(Vector2Int gridPos, Vector2Int[] shape)
     {
-        for (int j = 0; j < block.Length; j++)
+        foreach (Vector2Int offset in shape)
         {
-            // prints right
-            for (int i = 0; i < block[1].Length; i++)
-            {
-                if (block[j][i] == 1)
-                {
-                    gameGrid[x + i, y - j].GetComponent<tileScript>().setColour(new Color(1.0f, 1.0f, 1.0f, 1.0f));
-                    grid[x + i, y - j] = 1;
-                }
-            }
+            Vector2Int p = gridPos + offset;
+
+            if (!InBounds(p)) return false;
+            if (grid[p.x, p.y] != 0) return false;
         }
+        return true;
     }
 
-
+    bool InBounds(Vector2Int p)
+    {
+        return p.x >= 0 && p.y >= 0 && p.x < width && p.y < height;
+    }
 }

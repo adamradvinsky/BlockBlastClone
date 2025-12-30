@@ -6,51 +6,58 @@ using UnityEngine.InputSystem;
 
 public class shape : MonoBehaviour
 {
+    public GridManager grid;
 
-    public float test;
-    private int[][] block = new int[3][];
-    public GridManager gridManager;
+    public float tileSize;
+    public Vector2 gridOrigin;
+
+
+    Vector2Int[] block = new Vector2Int[]
+    {
+        // collumn : row
+        new Vector2Int(0, 0),
+        new Vector2Int(0, 1),
+        new Vector2Int(0, 2),
+        new Vector2Int(1, 2),
+        new Vector2Int(2, 2),
+    };
+
+    public Vector2 startPos;
 
 
 
-    // public Transform transform;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        block[0] = new int[] { 1, 1, 1 };
-
-        block[1] = new int[] { 1, 0, 0 };
-
-        block[2] = new int[] { 1, 0, 0 };
-
-
-
+        tileSize = 1f;
+        
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-
-    }
-
 
     void OnMouseDrag()
     {
+        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        transform.position = new Vector3(mouse.x, mouse.y, -5);
 
-        // drag object with mouse cursor
-        Vector2 drag_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.position = new Vector3(drag_position.x, drag_position.y, -9);
-
-        gridManager.setBlock(block, GridManager.typeShape.L);
+        Vector2Int gridPos = WorldToGrid(mouse);
+        grid.Hover(gridPos, block);
     }
-
 
     void OnMouseUp()
     {
-        transform.position = new Vector2(-8, 4);
+        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2Int gridPos = WorldToGrid(mouse);
+
+        grid.Place(gridPos);
+        transform.position = startPos;
     }
 
+    public Vector2Int WorldToGrid(Vector2 world)
+    {
+        Vector2 local = world - gridOrigin;
+    
+        int x = Mathf.RoundToInt(local.x / tileSize);
+        int y = Mathf.RoundToInt(-local.y / tileSize);
 
+        return new Vector2Int(x, y);
+    }
 
 }

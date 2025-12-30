@@ -1,68 +1,23 @@
 using UnityEngine;
 
-public class tileScript : MonoBehaviour
+public class TileScript : MonoBehaviour
 {
+    int x, y;
+    SpriteRenderer sr;
 
-
-    private SpriteRenderer spriteRenderer;
-    public GridManager gridManager;
-
-    public int x = 0;
-    public int y = 0;
-    public int[][] block = new int[3][];
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        sr = GetComponent<SpriteRenderer>();
     }
 
-    public void setX(int num)
+    public void Init(int x, int y)
     {
-        x = num;
+        this.x = x;
+        this.y = y;
     }
 
-    public void setY(int num)
+    public void SetColor(Color c)
     {
-        y = num;
+        sr.color = c;
     }
-
-    public void setColour(Color color)
-    {
-
-        spriteRenderer.color = color;
-    }
-
-    public void setOtherColour()
-    {
-
-        spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    void OnMouseDown()
-    {
-
-        // want to place block down at this position
-        gridManager.placeAble(x, y, block);
-
-
-
-    }
-
-
-
-    void OnMouseOver()
-    {
-
-        if (gridManager.shape != GridManager.typeShape.nothing)
-        {
-            gridManager.hovering(x, y);
-
-        }
-
-    }
-
-
 }
