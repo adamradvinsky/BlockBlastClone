@@ -491,6 +491,7 @@ MonoBehaviour:
   tilex: 0
   tiley: 0
   gridOrigin: {x: 0, y: 0}
+  clearPoints: 100
 --- !u!4 &535885921
 Transform:
   m_ObjectHideFlags: 0
@@ -921,7 +922,7 @@ Transform:
   m_GameObject: {fileID: 1049021457}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.88, y: 2.81, z: 0}
+  m_LocalPosition: {x: -5.74, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1062,7 +1063,7 @@ Transform:
   m_GameObject: {fileID: 1733226332}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.28, y: -1.8143, z: 0}
+  m_LocalPosition: {x: -2.41, y: -1.79, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1084,6 +1085,12 @@ MonoBehaviour:
   grid: {fileID: 535885920}
   tileSize: 0
   gridOrigin: {x: 0, y: 0}
+  block:
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 2}
+  - {x: 1, y: 2}
+  - {x: 2, y: 2}
   startPos: {x: -9.2, y: 0}
 --- !u!1 &1747196278
 GameObject:
@@ -1402,7 +1409,7 @@ Transform:
   m_GameObject: {fileID: 1839320781}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.13, y: -0.74, z: 0}
+  m_LocalPosition: {x: -7.17, y: -0.68, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1497,6 +1504,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2068511994725181790, guid: c488680d1ad33384b82329d975daa1dc, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068511994725181790, guid: c488680d1ad33384b82329d975daa1dc, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068511994725181790, guid: c488680d1ad33384b82329d975daa1dc, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.81
       objectReference: {fileID: 0}
@@ -1585,7 +1600,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 856428489574979623, guid: c488680d1ad33384b82329d975daa1dc, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5258003986702577611, guid: c488680d1ad33384b82329d975daa1dc, type: 3}

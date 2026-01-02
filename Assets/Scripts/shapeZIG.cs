@@ -24,7 +24,8 @@ public class shapeZIG : MonoBehaviour
     void Start()
     {
         tileSize = 1f;
-        gridOrigin = grid.tiles[0, 0].transform.position;
+        Vector2 gridTile = grid.tiles[0, 0].transform.position;
+        gridOrigin = gridTile + new Vector2(1,0);
     }
 
     void OnMouseDrag()
