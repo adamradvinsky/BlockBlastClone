@@ -1,4 +1,3 @@
-using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
@@ -23,7 +22,6 @@ public class GridManager : MonoBehaviour
 
 
     private int score = 0;
-    public int clearPoints = 100;
 
     void Start()
     {
@@ -84,20 +82,7 @@ public class GridManager : MonoBehaviour
             if (grid[p.x, p.y] != 0) continue;
 
             tiles[p.x, p.y].SetColor(color);
-
-
-            if (checkRow(p.y))
-            {
-
-            }
-
-            if (checkCollumn(p.x))
-            {
-
-            }
         }
-
-
 
         prevHover = gridPos;
     }
@@ -121,7 +106,7 @@ public class GridManager : MonoBehaviour
 
         if (checkAClear() > 0)
         {
-            Debug.Log(" A CLEAR");
+            Debug.Log("A CLAER");
         }
     }
 
@@ -163,9 +148,15 @@ public class GridManager : MonoBehaviour
         }
 
         // remove this row
-        score += clearPoints;
 
-        setRow(Color.white, 0, a);
+        for (int i = 0; i < 8; i++)
+        {
+            grid[a, i] = 0;
+            tiles[a, i].SetColor(Color.white);
+        }
+
+
+
 
         return true;
     }
@@ -183,29 +174,13 @@ public class GridManager : MonoBehaviour
         }
 
         // remove this collummn
-        score += clearPoints;
 
-        setCollumn(Color.white, 0, a);
-
+        for (int i = 0; i < 8; i++)
+        {
+            grid[i, a] = 0;
+            tiles[i, a].SetColor(Color.white);
+        }
         return true;
-    }
-
-    private void setRow(Color color, int a, int index)
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            grid[index, i] = a;
-            tiles[index, i].SetColor(color);
-        }
-    }
-
-    private void setCollumn(Color color, int a, int index)
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            grid[i, index] = a;
-            tiles[i, index].SetColor(Color.white);
-        }
     }
 
 

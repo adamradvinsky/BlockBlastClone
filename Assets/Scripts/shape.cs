@@ -12,7 +12,7 @@ public class shape : MonoBehaviour
     public Vector2 gridOrigin;
 
 
-    public Vector2Int[] block = new Vector2Int[]
+    Vector2Int[] block = new Vector2Int[]
     {
         // collumn : row
         new Vector2Int(0, 0),
