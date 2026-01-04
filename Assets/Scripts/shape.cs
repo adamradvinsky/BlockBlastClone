@@ -24,7 +24,6 @@ public class shape : MonoBehaviour
 
 
 
-
     void Start()
     {
         tileSize = grid.tileScale;
@@ -55,11 +54,9 @@ public class shape : MonoBehaviour
 
             yR = pos.y > yR ? pos.y : yR;
             yL = pos.y < yL ? pos.y : yL;
-
-
         }
+
         int bruh = (yR + yL);
-        Debug.Log("ylyr" + bruh);
         boxCol.size = new Vector2(boxCol.size.x + (Mathf.Abs(xR) + Mathf.Abs(xL)) * tileSize, boxCol.size.y + (Mathf.Abs(yR) + Mathf.Abs(yL)) * tileSize);
         boxCol.offset = new Vector2(boxCol.offset.x + (xR + xL) * tileSize / 2, boxCol.offset.y + (yR + yL) * tileSize / 2);
     }
@@ -97,5 +94,7 @@ public class shape : MonoBehaviour
 
         return new Vector2Int(x, y);
     }
+
+  
 
 }

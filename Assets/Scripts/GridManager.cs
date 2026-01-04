@@ -22,8 +22,6 @@ public class GridManager : MonoBehaviour
     public GameManager gameMan;
 
 
-    private int score = 0;
-
     void Awake()
     {
 
@@ -51,6 +49,8 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+
+   
 
     // Called while dragging
     public void Hover(Vector2Int gridPos, Vector2Int[] shape)
@@ -102,8 +102,10 @@ public class GridManager : MonoBehaviour
             tiles[p.x, p.y].SetColor(Color.blue);
         }
 
+
         // ADD SCORE
         gameMan.addScore(30);
+        gameMan.shapeCountDecrease();
 
         if (checkAClear() > 0)
         {
