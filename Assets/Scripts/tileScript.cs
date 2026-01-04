@@ -20,4 +20,9 @@ public class TileScript : MonoBehaviour
     {
         sr.color = c;
     }
+
+    public void OnMouseDown()
+    {
+      //  Debug.Log( " x : "  + x + " y : " + y);
+    }
 }

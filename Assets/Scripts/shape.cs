@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,27 +10,55 @@ public class shape : MonoBehaviour
     public GridManager grid;
 
     public float tileSize;
-    public Vector2 gridOrigin;
+    private Vector2 gridOrigin;
+    public GameObject prefabBlock;
 
 
-    Vector2Int[] block = new Vector2Int[]
+    public Vector2Int[] block = new Vector2Int[]
     {
         // collumn : row
-        new Vector2Int(0, 0),
-        new Vector2Int(0, 1),
-        new Vector2Int(0, 2),
-        new Vector2Int(1, 2),
-        new Vector2Int(2, 2),
+        new Vector2Int(0, 0)
     };
 
-    public Vector2 startPos;
 
 
 
     void Start()
     {
-        tileSize = 1f;
-        gridOrigin = grid.tiles[0,0].transform.position;
+
+        gridOrigin = grid.tiles[0, 0].transform.position;
+
+        BoxCollider2D boxCol = GetComponent<BoxCollider2D>();
+
+        int xR = 0;
+        int xL = 0;
+        
+        int yR = 0;
+        int yL = 0;
+
+        // set up the blocks
+        foreach (var pos in block)
+        {
+            GameObject t = Instantiate(prefabBlock, transform);
+            Vector3 newPos = transform.position + new Vector3(pos.x * tileSize, pos.y * tileSize, transform.position.y);
+            t.transform.position = newPos;
+
+            int a = pos.y == 0 ? 0 : pos.y > 0 ? 1 : -1;
+            int b = pos.x == 0 ? 0 : pos.x > 0 ? 1 : -1;
+
+
+            xR = pos.x > xR ? pos.x : xR;
+            xL = pos.x < xL ? pos.x : xL;
+
+            yR = pos.y > yR ? pos.y : yR;
+            yL = pos.y < yL ? pos.y : yL;
+
+
+        }
+        int bruh = (yR + yL);
+        Debug.Log("ylyr" + bruh);
+        boxCol.size = new Vector2(boxCol.size.x + (Mathf.Abs(xR) + Mathf.Abs(xL)) * tileSize, boxCol.size.y + (Mathf.Abs(yR) + Mathf.Abs(yL)) * tileSize);
+        boxCol.offset = new Vector2(boxCol.offset.x + (xR + xL) * tileSize / 2, boxCol.offset.y + (yR + yL) * tileSize / 2);
     }
 
     void OnMouseDrag()
@@ -47,7 +76,7 @@ public class shape : MonoBehaviour
         Vector2Int gridPos = WorldToGrid(mouse);
 
         grid.Place(gridPos);
-        transform.position = startPos;
+        Destroy(this.gameObject);
     }
 
     public Vector2Int WorldToGrid(Vector2 world)
@@ -55,7 +84,7 @@ public class shape : MonoBehaviour
         Vector2 local = world - gridOrigin;
 
         int x = Mathf.RoundToInt(local.x / tileSize);
-        int y = Mathf.RoundToInt(-local.y / tileSize);
+        int y = Mathf.RoundToInt(local.y / tileSize);
 
         return new Vector2Int(x, y);
     }

@@ -16,28 +16,26 @@ public class GridManager : MonoBehaviour
     Vector2Int[] activeShape;
 
     public Vector2 startPos;
-    public float tilex;
-    public float tiley;
+    public float tilex = 1;
+    public float tiley = 1;
     public Vector2 gridOrigin;
 
 
     private int score = 0;
 
-    void Start()
+    void Awake()
     {
 
         startPos = transform.position;
         grid = new int[width, height];
         tiles = new TileScript[width, height];
-        tilex = tilePrefab.transform.localScale.x;
-        tiley = tilePrefab.transform.localScale.y;
 
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
                 GameObject t = Instantiate(tilePrefab, transform);
-                Vector2 pos = startPos + new Vector2(x * tilex, -y * tiley);
+                Vector2 pos = startPos + new Vector2(x * tilex, y * tiley);
                 t.transform.position = pos;
 
                 if (x == 0 && y == 0)
@@ -56,6 +54,7 @@ public class GridManager : MonoBehaviour
     // Called while dragging
     public void Hover(Vector2Int gridPos, Vector2Int[] shape)
     {
+
         if (gridPos == prevHover)
             return;
 
