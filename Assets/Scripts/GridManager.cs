@@ -15,10 +15,11 @@ public class GridManager : MonoBehaviour
     Vector2Int prevHover = new Vector2Int(-1, -1);
     Vector2Int[] activeShape;
 
-    public Vector2 startPos;
-    public float tilex = 1;
-    public float tiley = 1;
-    public Vector2 gridOrigin;
+    private Vector2 startPos;
+    public float tileScale;
+    private Vector2 gridOrigin;
+
+    public GameManager gameMan;
 
 
     private int score = 0;
@@ -35,7 +36,7 @@ public class GridManager : MonoBehaviour
             for (int x = 0; x < width; x++)
             {
                 GameObject t = Instantiate(tilePrefab, transform);
-                Vector2 pos = startPos + new Vector2(x * tilex, y * tiley);
+                Vector2 pos = startPos + new Vector2(x * tileScale, y * tileScale);
                 t.transform.position = pos;
 
                 if (x == 0 && y == 0)
@@ -87,10 +88,10 @@ public class GridManager : MonoBehaviour
     }
 
     // Called on mouse release
-    public void Place(Vector2Int gridPos)
+    public bool Place(Vector2Int gridPos)
     {
         if (!CanPlace(gridPos, activeShape))
-            return;
+            return false;
 
         foreach (Vector2Int offset in activeShape)
         {
@@ -101,12 +102,15 @@ public class GridManager : MonoBehaviour
             tiles[p.x, p.y].SetColor(Color.blue);
         }
 
-        Debug.Log("SCORE: " + score);
+        // ADD SCORE
+        gameMan.addScore(30);
 
         if (checkAClear() > 0)
         {
             Debug.Log("A CLAER");
         }
+
+        return true;
     }
 
 
@@ -147,15 +151,11 @@ public class GridManager : MonoBehaviour
         }
 
         // remove this row
-
         for (int i = 0; i < 8; i++)
         {
             grid[a, i] = 0;
             tiles[a, i].SetColor(Color.white);
         }
-
-
-
 
         return true;
     }
@@ -163,7 +163,6 @@ public class GridManager : MonoBehaviour
 
     private bool checkCollumn(int a)
     {
-
         for (int i = 0; i < 8; i++)
         {
             if (grid[i, a] == 0)
@@ -173,7 +172,6 @@ public class GridManager : MonoBehaviour
         }
 
         // remove this collummn
-
         for (int i = 0; i < 8; i++)
         {
             grid[i, a] = 0;

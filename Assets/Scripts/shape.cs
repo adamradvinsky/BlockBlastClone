@@ -9,9 +9,11 @@ public class shape : MonoBehaviour
 {
     public GridManager grid;
 
-    public float tileSize;
+    private float tileSize;
     private Vector2 gridOrigin;
     public GameObject prefabBlock;
+
+    private Vector2 snapPos;
 
 
     public Vector2Int[] block = new Vector2Int[]
@@ -25,14 +27,15 @@ public class shape : MonoBehaviour
 
     void Start()
     {
-
+        tileSize = grid.tileScale;
+        snapPos = transform.position;
         gridOrigin = grid.tiles[0, 0].transform.position;
 
         BoxCollider2D boxCol = GetComponent<BoxCollider2D>();
 
         int xR = 0;
         int xL = 0;
-        
+
         int yR = 0;
         int yL = 0;
 
@@ -75,8 +78,14 @@ public class shape : MonoBehaviour
         Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int gridPos = WorldToGrid(mouse);
 
-        grid.Place(gridPos);
-        Destroy(this.gameObject);
+        if (grid.Place(gridPos))
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            transform.position = snapPos;
+        }
     }
 
     public Vector2Int WorldToGrid(Vector2 world)
