@@ -66,25 +66,82 @@ public class GridManager : MonoBehaviour
         bool canPlace = CanPlace(gridPos, shape);
         Color color;
 
+        List<Vector2Int> extraShape = new List<Vector2Int>();
+
         if (canPlace)
         {
+
+            for (int i = 0; i < shape.Length; i++)
+            {
+                extraShape.Add(shape[i]);
+            }
+
+
             color = Color.green;
             // check if can clear 
             // then add those to what to highlight
+
+
+            foreach (var pos in shape)
+            {
+                Vector2Int p = gridPos + pos;
+
+                //Debug.Log("checking to see if collumn " + p.x + " is good");
+                //Debug.Log("checking to see if row " + p.y + " is good");
+
+                foreach (Vector2Int offset in activeShape)
+                {
+                    Vector2Int ds = gridPos + offset;
+                    grid[ds.x, ds.y] = 1;
+                }
+
+
+                if (checkCollumn(p.x))
+                {
+
+                    Debug.Log("ALERT Y");
+
+
+                    // // add row to highlight
+                    // for (int i = 0; i < 8; i++)
+                    // {
+                    //     extraShape.Add(new Vector2Int(pos.x, i));
+                    // }
+
+                }
+
+                if (checkRow(p.y))
+                {
+
+                    Debug.Log("ALERT Y");
+                    // // add row to highlight
+                    // for (int i = 0; i < 8; i++)
+                    // {
+                    //     extraShape.Add(new Vector2Int(i, pos.y));
+                    // }
+                }
+
+
+                foreach (Vector2Int offset in activeShape)
+                {
+                    Vector2Int ds = gridPos + offset;
+                    grid[ds.x, ds.y] = 0;
+                }
+            }
         }
         else
         {
             return;
         }
 
-        highlight(gridPos, shape, color);
+        highlight(gridPos, extraShape, color);
 
         prevHover = gridPos;
     }
 
 
 
-    private void highlight(Vector2Int gridPos, Vector2Int[] shape, Color color)
+    private void highlight(Vector2Int gridPos, List<Vector2Int> shape, Color color)
     {
         foreach (Vector2Int offset in shape)
         {
