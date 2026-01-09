@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
@@ -50,7 +51,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-   
+
 
     // Called while dragging
     public void Hover(Vector2Int gridPos, Vector2Int[] shape)
@@ -68,12 +69,23 @@ public class GridManager : MonoBehaviour
         if (canPlace)
         {
             color = Color.green;
+            // check if can clear 
+            // then add those to what to highlight
         }
         else
         {
             return;
         }
 
+        highlight(gridPos, shape, color);
+
+        prevHover = gridPos;
+    }
+
+
+
+    private void highlight(Vector2Int gridPos, Vector2Int[] shape, Color color)
+    {
         foreach (Vector2Int offset in shape)
         {
             Vector2Int p = gridPos + offset;
@@ -84,7 +96,6 @@ public class GridManager : MonoBehaviour
             tiles[p.x, p.y].SetColor(color);
         }
 
-        prevHover = gridPos;
     }
 
     // Called on mouse release
@@ -107,25 +118,32 @@ public class GridManager : MonoBehaviour
         gameMan.addScore(30);
         gameMan.shapeCountDecrease();
 
-        if (checkAClear() > 0)
-        {
-            Debug.Log("A CLAER");
-        }
+        checkAClear();
 
         return true;
     }
 
 
-    private int checkAClear()
+
+    private void extraHover()
     {
-        int clear = 0;
+
+    }
+
+
+    private void checkAClear()
+    {
+        List<int> rows = new List<int>();
+        List<int> colls = new List<int>();
+
 
         // check row
         for (int i = 0; i < 8; i++)
         {
             if (checkRow(i))
             {
-                clear++;
+                rows.Add(i);
+                Debug.Log("row " + i + " is a clear");
             }
         }
 
@@ -134,15 +152,28 @@ public class GridManager : MonoBehaviour
         {
             if (checkCollumn(i))
             {
-                clear++;
+                colls.Add(i);
+                Debug.Log("collumn " + i + " is a clear");
             }
         }
-
-        return clear;
-
+        clearColRow(rows, colls);
     }
 
     private bool checkRow(int a)
+    {
+
+        for (int i = 0; i < 8; i++)
+        {
+            if (grid[i, a] == 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    private bool checkCollumn(int a)
     {
         for (int i = 0; i < 8; i++)
         {
@@ -152,36 +183,29 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        // remove this row
-        for (int i = 0; i < 8; i++)
-        {
-            grid[a, i] = 0;
-            tiles[a, i].SetColor(Color.white);
-        }
-
         return true;
     }
 
-
-    private bool checkCollumn(int a)
+    private void clearColRow(List<int> rows, List<int> colls)
     {
-        for (int i = 0; i < 8; i++)
+        foreach (int a in rows)
         {
-            if (grid[i, a] == 0)
+            for (int i = 0; i < 8; i++)
             {
-                return false;
+                grid[i, a] = 0;
+                tiles[i, a].SetColor(Color.white);
             }
         }
 
-        // remove this collummn
-        for (int i = 0; i < 8; i++)
+        foreach (int a in colls)
         {
-            grid[i, a] = 0;
-            tiles[i, a].SetColor(Color.white);
+            for (int i = 0; i < 8; i++)
+            {
+                grid[a, i] = 0;
+                tiles[a, i].SetColor(Color.white);
+            }
         }
-        return true;
     }
-
 
 
 

@@ -60,7 +60,6 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             random = UnityEngine.Random.Range(0, blocks.Count);
-            Debug.Log("list count = " + blocks.Count);
             Instantiate(blocks[random], startPositions[i], quaternion.identity);
         }
 
