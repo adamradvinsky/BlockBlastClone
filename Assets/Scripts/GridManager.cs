@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
     public GameObject tilePrefab;
 
     public int[,] grid;
+    public int[,] highlightGrid;
     public TileScript[,] tiles;
 
     Vector2Int prevHover = new Vector2Int(-1, -1);
@@ -28,6 +29,9 @@ public class GridManager : MonoBehaviour
 
         startPos = transform.position;
         grid = new int[width, height];
+
+        highlightGrid = new int[width, height];
+
         tiles = new TileScript[width, height];
 
         for (int y = 0; y < height; y++)
@@ -46,6 +50,7 @@ public class GridManager : MonoBehaviour
 
                 tiles[x, y] = tile;
                 grid[x, y] = 0;
+                highlightGrid[x, y] = 0;
 
             }
         }
@@ -66,16 +71,17 @@ public class GridManager : MonoBehaviour
         bool canPlace = CanPlace(gridPos, shape);
         Color color;
 
-        List<Vector2Int> extraShape = new List<Vector2Int>();
+        List<Vector2Int> clearShape = new List<Vector2Int>();
+
+
 
         if (canPlace)
         {
-
-            for (int i = 0; i < shape.Length; i++)
+            foreach (Vector2Int offset in shape)
             {
-                extraShape.Add(shape[i]);
+                Vector2Int p = gridPos + offset;
+                highlightGrid[p.x, p.y] = 1;
             }
-
 
             color = Color.green;
             // check if can clear 
@@ -85,47 +91,28 @@ public class GridManager : MonoBehaviour
             foreach (var pos in shape)
             {
                 Vector2Int p = gridPos + pos;
-
-                //Debug.Log("checking to see if collumn " + p.x + " is good");
-                //Debug.Log("checking to see if row " + p.y + " is good");
-
-                foreach (Vector2Int offset in activeShape)
+                //Debug.Log("x: " + p.x + " y: " + p.y);
+                if (checkCollumn(p.x, highlightGrid))
                 {
-                    Vector2Int ds = gridPos + offset;
-                    grid[ds.x, ds.y] = 1;
-                }
+                    Debug.Log("ALERT collumn");
 
-
-                if (checkCollumn(p.x))
-                {
-
-                    Debug.Log("ALERT Y");
-
-
-                    // // add row to highlight
-                    // for (int i = 0; i < 8; i++)
-                    // {
-                    //     extraShape.Add(new Vector2Int(pos.x, i));
-                    // }
+                    // // add collumn to highlight
+                    for (int i = 0; i < 8; i++)
+                    {
+                        clearShape.Add(new Vector2Int(p.x, i));
+                    }
 
                 }
 
-                if (checkRow(p.y))
+                if (checkRow(p.y, highlightGrid))
                 {
+                    Debug.Log("ALERT ROW");
 
-                    Debug.Log("ALERT Y");
-                    // // add row to highlight
-                    // for (int i = 0; i < 8; i++)
-                    // {
-                    //     extraShape.Add(new Vector2Int(i, pos.y));
-                    // }
-                }
-
-
-                foreach (Vector2Int offset in activeShape)
-                {
-                    Vector2Int ds = gridPos + offset;
-                    grid[ds.x, ds.y] = 0;
+                    // add row to highlight
+                    for (int i = 0; i < 8; i++)
+                    {
+                        clearShape.Add(new Vector2Int(i, p.y));
+                    }
                 }
             }
         }
@@ -134,14 +121,15 @@ public class GridManager : MonoBehaviour
             return;
         }
 
-        highlight(gridPos, extraShape, color);
+        highlight(gridPos, shape, color);
+        highlightRC(gridPos, clearShape, Color.red);
 
         prevHover = gridPos;
     }
 
 
 
-    private void highlight(Vector2Int gridPos, List<Vector2Int> shape, Color color)
+    private void highlight(Vector2Int gridPos, IEnumerable<Vector2Int> shape, Color color)
     {
         foreach (Vector2Int offset in shape)
         {
@@ -152,8 +140,19 @@ public class GridManager : MonoBehaviour
 
             tiles[p.x, p.y].SetColor(color);
         }
-
     }
+
+    private void highlightRC(Vector2Int gridPos, IEnumerable<Vector2Int> shape, Color color)
+    {
+        foreach (Vector2Int offset in shape)
+        {
+            Vector2Int p = gridPos + offset;
+
+
+            tiles[offset.x, offset.y].SetColor(color);
+        }
+    }
+
 
     // Called on mouse release
     public bool Place(Vector2Int gridPos)
@@ -167,6 +166,7 @@ public class GridManager : MonoBehaviour
             if (!InBounds(p)) continue;
 
             grid[p.x, p.y] = 1;
+            highlightGrid[p.x, p.y] = 1;
             tiles[p.x, p.y].SetColor(Color.blue);
         }
 
@@ -197,7 +197,7 @@ public class GridManager : MonoBehaviour
         // check row
         for (int i = 0; i < 8; i++)
         {
-            if (checkRow(i))
+            if (checkRow(i, grid))
             {
                 rows.Add(i);
                 Debug.Log("row " + i + " is a clear");
@@ -207,7 +207,7 @@ public class GridManager : MonoBehaviour
 
         for (int i = 0; i < 8; i++)
         {
-            if (checkCollumn(i))
+            if (checkCollumn(i, grid))
             {
                 colls.Add(i);
                 Debug.Log("collumn " + i + " is a clear");
@@ -216,13 +216,15 @@ public class GridManager : MonoBehaviour
         clearColRow(rows, colls);
     }
 
-    private bool checkRow(int a)
+    private bool checkRow(int a, int[,] grid)
     {
 
         for (int i = 0; i < 8; i++)
         {
             if (grid[i, a] == 0)
             {
+
+                //Debug.Log("x: " + i + " y: " + a + " bad boy");
                 return false;
             }
         }
@@ -230,7 +232,7 @@ public class GridManager : MonoBehaviour
     }
 
 
-    private bool checkCollumn(int a)
+    private bool checkCollumn(int a, int[,] grid)
     {
         for (int i = 0; i < 8; i++)
         {
@@ -250,6 +252,7 @@ public class GridManager : MonoBehaviour
             for (int i = 0; i < 8; i++)
             {
                 grid[i, a] = 0;
+                highlightGrid[i, a] = 0;
                 tiles[i, a].SetColor(Color.white);
             }
         }
@@ -259,6 +262,7 @@ public class GridManager : MonoBehaviour
             for (int i = 0; i < 8; i++)
             {
                 grid[a, i] = 0;
+                highlightGrid[a, i] = 0;
                 tiles[a, i].SetColor(Color.white);
             }
         }
@@ -278,7 +282,27 @@ public class GridManager : MonoBehaviour
             if (!InBounds(p)) continue;
 
             if (grid[p.x, p.y] == 0)
+            {
+                highlightGrid[p.x, p.y] = 0;
                 tiles[p.x, p.y].SetColor(Color.white);
+            }
+        }
+    }
+
+    void ClearHoverRC(Vector2Int gridPos, Vector2Int[] shape)
+    {
+        if (shape == null) return;
+
+        foreach (Vector2Int offset in shape)
+        {
+            Vector2Int p = gridPos + offset;
+            if (!InBounds(p)) continue;
+
+            if (grid[p.x, p.y] == 0)
+            {
+                highlightGrid[p.x, p.y] = 0;
+                tiles[p.x, p.y].SetColor(Color.white);
+            }
         }
     }
 
