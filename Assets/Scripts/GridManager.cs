@@ -26,6 +26,19 @@ public class GridManager : MonoBehaviour
     private List<int> rowClear;
     private List<int> colClear;
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            tiles[0, 0].setToFill();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            tiles[0, 0].setToEmpty();
+        }
+    }
+
 
     void Awake()
     {
@@ -98,13 +111,11 @@ public class GridManager : MonoBehaviour
 
                 if (checkCollumn(p.x, highlightGrid))
                 {
-                    Debug.Log("adding col x: " + p.x);
                     rowClear.Add(p.x);
                 }
 
                 if (checkRow(p.y, highlightGrid))
                 {
-                    Debug.Log("adding row x: " + p.y);
                     colClear.Add(p.y);
                 }
             }
@@ -131,7 +142,7 @@ public class GridManager : MonoBehaviour
             if (!InBounds(p)) continue;
             if (grid[p.x, p.y] != 0) continue;
 
-            tiles[p.x, p.y].SetColor(color);
+            tiles[p.x, p.y].setToHover();
         }
     }
 
@@ -141,11 +152,9 @@ public class GridManager : MonoBehaviour
     {
         foreach (int a in row)
         {
-            Debug.Log("highlight col: " + a);
             for (int i = 0; i < 8; i++)
             {
-                //highlightGrid[a, i] = 0;
-                tiles[a, i].SetColor(color);
+                tiles[a, i].setToClearHover();
             }
         }
 
@@ -153,10 +162,7 @@ public class GridManager : MonoBehaviour
         {
             for (int i = 0; i < 8; i++)
             {
-
-                Debug.Log("highlight row: " + a);
-                //highlightGrid[i, a] = 0;
-                tiles[i, a].SetColor(color);
+                tiles[i, a].setToClearHover();
             }
         }
     }
@@ -175,7 +181,10 @@ public class GridManager : MonoBehaviour
 
             grid[p.x, p.y] = 1;
             highlightGrid[p.x, p.y] = 1;
-            tiles[p.x, p.y].SetColor(Color.blue);
+            //tiles[p.x, p.y].setToNotClearHover();
+            tiles[p.x, p.y].setToFill();
+            tiles[p.x, p.y].setToNotHover();
+
         }
 
 
@@ -226,7 +235,6 @@ public class GridManager : MonoBehaviour
         {
             if (grid[i, a] == 0)
             {
-                Debug.Log("x: " + i + " y: " + a + " has failed");
                 return false;
             }
         }
@@ -240,8 +248,6 @@ public class GridManager : MonoBehaviour
         {
             if (grid[a, i] == 0)
             {
-
-                //Debug.Log("x: " + i + " y: " + a + " has failed");
                 return false;
             }
         }
@@ -257,7 +263,8 @@ public class GridManager : MonoBehaviour
             {
                 grid[i, a] = 0;
                 highlightGrid[i, a] = 0;
-                tiles[i, a].SetColor(Color.white);
+                tiles[i, a].setToEmpty();
+                tiles[i, a].setToNotClearHover();
             }
         }
 
@@ -267,7 +274,8 @@ public class GridManager : MonoBehaviour
             {
                 grid[a, i] = 0;
                 highlightGrid[a, i] = 0;
-                tiles[a, i].SetColor(Color.white);
+                tiles[a, i].setToEmpty();
+                tiles[a, i].setToNotClearHover();
             }
         }
     }
@@ -286,7 +294,7 @@ public class GridManager : MonoBehaviour
             if (grid[p.x, p.y] == 0)
             {
                 highlightGrid[p.x, p.y] = 0;
-                tiles[p.x, p.y].SetColor(Color.white);
+                tiles[p.x, p.y].setToNotHover();
             }
         }
     }
@@ -300,12 +308,12 @@ public class GridManager : MonoBehaviour
 
         foreach (int a in row)
         {
-
             for (int i = 0; i < 8; i++)
             {
                 if (highlightGrid[a, i] == 1)
                 {
-                    tiles[a, i].SetColor(Color.blue);
+                    tiles[a, i].setToNotHover();
+                    tiles[a, i].setToNotClearHover();
                 }
             }
         }
@@ -317,7 +325,7 @@ public class GridManager : MonoBehaviour
             {
                 if (highlightGrid[i, a] == 1)
                 {
-                    tiles[i, a].SetColor(Color.blue);
+                    tiles[i, a].setToNotClearHover();
                 }
             }
         }

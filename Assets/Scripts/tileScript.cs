@@ -4,10 +4,14 @@ public class TileScript : MonoBehaviour
 {
     int x, y;
     SpriteRenderer sr;
+    public Sprite emptySprite;
+    public Sprite fillSprite;
+    public Animator anim;
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+        sr.sprite = emptySprite;
     }
 
     public void Init(int x, int y)
@@ -21,8 +25,50 @@ public class TileScript : MonoBehaviour
         sr.color = c;
     }
 
-    public void OnMouseDown()
+    
+
+    public void setToEmpty()
     {
-      //  Debug.Log( " x : "  + x + " y : " + y);
+        //sr.sprite = emptySprite;
+        anim.SetBool("fill", false);
     }
+
+    public void setToFill()
+    {
+        //sr.sprite = fillSprite;
+        
+        anim.SetBool("fill", true);
+
+
+    }
+
+    public void setToHover()
+    {
+        //sr.sprite = fillSprite;
+        
+        anim.SetBool("hover", true);
+    }
+
+
+    public void setToNotHover()
+    {
+        //sr.sprite = fillSprite;
+        
+        anim.SetBool("hover", false);
+    }
+
+    public void setToClearHover()
+    {
+        //sr.sprite = fillSprite;
+        
+        anim.SetBool("clearhover", true);
+    }
+
+    public void setToNotClearHover()
+    {
+        //sr.sprite = fillSprite;
+        
+        anim.SetBool("clearhover", false);
+    }
+
 }
