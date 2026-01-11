@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class shape : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class shape : MonoBehaviour
     public GameObject prefabBlock;
 
     private Vector2 snapPos;
-
+    private bool doBox = true;
 
     public Vector2Int[] block = new Vector2Int[]
     {
@@ -26,11 +27,16 @@ public class shape : MonoBehaviour
 
     void Start()
     {
+
         tileSize = grid.tileScale;
         snapPos = transform.position;
         gridOrigin = grid.tiles[0, 0].transform.position;
+        
+        BoxCollider2D badbox = gameObject.GetComponent<BoxCollider2D>();
+        Destroy(badbox);
 
-        BoxCollider2D boxCol = GetComponent<BoxCollider2D>();
+        BoxCollider2D boxCol = gameObject.AddComponent<BoxCollider2D>();
+
 
         int xR = 0;
         int xL = 0;
@@ -59,6 +65,7 @@ public class shape : MonoBehaviour
         int bruh = (yR + yL);
         boxCol.size = new Vector2(boxCol.size.x + (Mathf.Abs(xR) + Mathf.Abs(xL)) * tileSize, boxCol.size.y + (Mathf.Abs(yR) + Mathf.Abs(yL)) * tileSize);
         boxCol.offset = new Vector2(boxCol.offset.x + (xR + xL) * tileSize / 2, boxCol.offset.y + (yR + yL) * tileSize / 2);
+
     }
 
     void OnMouseDrag()
@@ -68,6 +75,12 @@ public class shape : MonoBehaviour
 
         Vector2Int gridPos = WorldToGrid(mouse);
         grid.Hover(gridPos, block);
+    }
+
+    public void noBox()
+    {
+
+        doBox = false;
     }
 
     void OnMouseUp()
@@ -95,6 +108,6 @@ public class shape : MonoBehaviour
         return new Vector2Int(x, y);
     }
 
-  
+
 
 }

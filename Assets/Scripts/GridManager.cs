@@ -181,7 +181,6 @@ public class GridManager : MonoBehaviour
 
             grid[p.x, p.y] = 1;
             highlightGrid[p.x, p.y] = 1;
-            //tiles[p.x, p.y].setToNotClearHover();
             tiles[p.x, p.y].setToFill();
             tiles[p.x, p.y].setToNotHover();
 
@@ -264,6 +263,7 @@ public class GridManager : MonoBehaviour
                 grid[i, a] = 0;
                 highlightGrid[i, a] = 0;
                 tiles[i, a].setToEmpty();
+                tiles[i, a].setToNotHover();
                 tiles[i, a].setToNotClearHover();
             }
         }
@@ -275,6 +275,7 @@ public class GridManager : MonoBehaviour
                 grid[a, i] = 0;
                 highlightGrid[a, i] = 0;
                 tiles[a, i].setToEmpty();
+                tiles[a, i].setToNotHover();
                 tiles[a, i].setToNotClearHover();
             }
         }

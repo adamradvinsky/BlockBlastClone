@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
         addShapes();
     }
 
@@ -47,10 +48,8 @@ public class GameManager : MonoBehaviour
 
 
 
-    public Vector3Int[] startPositions = new Vector3Int[]
+    public GameObject[] startPositions = new GameObject[]
     {
-        // collumn : row
-        new Vector3Int(0, 0)
     };
 
 
@@ -60,7 +59,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             random = UnityEngine.Random.Range(0, blocks.Count);
-            Instantiate(blocks[random], startPositions[i], quaternion.identity);
+            GameObject newBlock = Instantiate(blocks[random], transform);
+            newBlock.transform.position = startPositions[i].transform.position;
+            newBlock.GetComponent<shape>().noBox();
         }
 
     }
