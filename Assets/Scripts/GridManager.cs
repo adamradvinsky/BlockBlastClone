@@ -183,10 +183,9 @@ public class GridManager : MonoBehaviour
             highlightGrid[p.x, p.y] = 1;
             tiles[p.x, p.y].setToFill();
             tiles[p.x, p.y].setToNotHover();
-
         }
 
-
+        ClearHover(prevHover, activeShape);
         // ADD SCORE
         gameMan.addScore(30);
         gameMan.shapeCountDecrease();
