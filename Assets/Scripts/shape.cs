@@ -23,17 +23,35 @@ public class shape : MonoBehaviour
         // collumn : row
         new Vector2Int(0, 0)
     };
+
+    public Vector2Int[] finalBlock;
     public Vector2Int[] rotatedBlock;
 
 
     void Awake()
     {
+        finalBlock = new Vector2Int[block.Length];
+
+        copyArray(finalBlock, block);
+        flip(finalBlock);
+
         //flip(block);
+    }
+
+    private void copyArray(Vector2Int[] a, Vector2Int[] b)
+    {
+        for (int i = 0; i < b.Length; i++)
+        {
+            
+            a[i] = b[i];
+        }
     }
 
 
     void Start()
     {
+
+        
         tileSize = grid.tileScale;
         snapPos = transform.position;
         gridOrigin = grid.tiles[0, 0].transform.position;
@@ -52,7 +70,7 @@ public class shape : MonoBehaviour
         int yL = 0;
 
         // set up the blocks
-        foreach (var pos in block)
+        foreach (var pos in finalBlock)
         {
             GameObject t = Instantiate(prefabBlock, transform);
             Vector3 newPos = transform.position + new Vector3(pos.x * tileSize, pos.y * tileSize, transform.position.y);
@@ -81,7 +99,7 @@ public class shape : MonoBehaviour
         transform.position = new Vector3(mouse.x, mouse.y, -5);
 
         Vector2Int gridPos = WorldToGrid(mouse);
-        grid.Hover(gridPos, block);
+        grid.Hover(gridPos, finalBlock);
     }
 
     void OnMouseUp()
@@ -130,7 +148,7 @@ public class shape : MonoBehaviour
         for (int i = 0; i < block.Length; i++)
         {
             Vector2Int arotat = new Vector2Int(-ablock[i].x, -ablock[i].y);
-            block[i] = arotat;
+            ablock[i] = arotat;
         }
     }
 }
