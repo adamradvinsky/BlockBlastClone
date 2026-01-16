@@ -15,10 +15,12 @@ public class GameManager : MonoBehaviour
     public List<GameObject> blocks = new List<GameObject>();
 
 
+    public List<GameObject> inGameBlocks = new List<GameObject>();
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
         addShapes();
     }
 
@@ -61,8 +63,19 @@ public class GameManager : MonoBehaviour
             random = UnityEngine.Random.Range(0, blocks.Count);
             GameObject newBlock = Instantiate(blocks[random], transform);
             newBlock.transform.position = startPositions[i].transform.position;
-            newBlock.GetComponent<shape>().noBox();
+
+            inGameBlocks.Add(newBlock);
         }
+
+    }
+
+    public void removeBlockFromGame(GameObject block)
+    {
+        inGameBlocks.Remove(block);
+    }
+
+    public void lose()
+    {
 
     }
 

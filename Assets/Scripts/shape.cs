@@ -14,28 +14,35 @@ public class shape : MonoBehaviour
     private Vector2 gridOrigin;
     public GameObject prefabBlock;
 
+
+    public GameManager gameMan;
     private Vector2 snapPos;
-    private bool doBox = true;
 
     public Vector2Int[] block = new Vector2Int[]
     {
         // collumn : row
         new Vector2Int(0, 0)
     };
+    public Vector2Int[] rotatedBlock;
 
+
+    void Awake()
+    {
+    }
 
 
     void Start()
     {
-
+        //flip(block);
         tileSize = grid.tileScale;
         snapPos = transform.position;
         gridOrigin = grid.tiles[0, 0].transform.position;
-        
+
         BoxCollider2D badbox = gameObject.GetComponent<BoxCollider2D>();
         Destroy(badbox);
 
         BoxCollider2D boxCol = gameObject.AddComponent<BoxCollider2D>();
+
 
 
         int xR = 0;
@@ -77,12 +84,6 @@ public class shape : MonoBehaviour
         grid.Hover(gridPos, block);
     }
 
-    public void noBox()
-    {
-
-        doBox = false;
-    }
-
     void OnMouseUp()
     {
         Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -90,7 +91,9 @@ public class shape : MonoBehaviour
 
         if (grid.Place(gridPos))
         {
+            gameMan.removeBlockFromGame(this.gameObject);
             Destroy(this.gameObject);
+
         }
         else
         {
@@ -108,6 +111,22 @@ public class shape : MonoBehaviour
         return new Vector2Int(x, y);
     }
 
+    public void rotate(Vector2Int[] ablock)
+    {
+        for (int i = 0; i < ablock.Length; i++)
+        {
+            Vector2Int arotat = new Vector2Int(ablock[i].y, -ablock[i].x);
+            this.block[i] = arotat;
+        }
+    }
 
+    public void flip(Vector2Int[] ablock)
+    {
 
+        for (int i = 0; i < block.Length; i++)
+        {
+            Vector2Int arotat = new Vector2Int(-ablock[i].x, -ablock[i].y);
+            this.block[i] = arotat;
+        }
+    }
 }

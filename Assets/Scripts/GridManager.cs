@@ -190,10 +190,21 @@ public class GridManager : MonoBehaviour
         gameMan.addScore(30);
         gameMan.shapeCountDecrease();
 
+
+
         checkAClear();
 
         return true;
     }
+
+
+    // public void checkForLoss(Vector2Int gridPos, )
+    // {
+    //     foreach (var item in collection)
+    //     {
+            
+    //     }
+    // }
 
 
 
@@ -225,6 +236,7 @@ public class GridManager : MonoBehaviour
         }
         clearColRow(rows, colls);
     }
+    
 
     private bool checkRow(int a, int[,] grid)
     {
