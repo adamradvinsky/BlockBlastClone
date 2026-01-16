@@ -28,12 +28,12 @@ public class shape : MonoBehaviour
 
     void Awake()
     {
+        //flip(block);
     }
 
 
     void Start()
     {
-        //flip(block);
         tileSize = grid.tileScale;
         snapPos = transform.position;
         gridOrigin = grid.tiles[0, 0].transform.position;
@@ -92,6 +92,8 @@ public class shape : MonoBehaviour
         if (grid.Place(gridPos))
         {
             gameMan.removeBlockFromGame(this.gameObject);
+            grid.checkForLoss();
+            
             Destroy(this.gameObject);
 
         }
@@ -123,10 +125,12 @@ public class shape : MonoBehaviour
     public void flip(Vector2Int[] ablock)
     {
 
+
+        Debug.Log("bleh");
         for (int i = 0; i < block.Length; i++)
         {
             Vector2Int arotat = new Vector2Int(-ablock[i].x, -ablock[i].y);
-            this.block[i] = arotat;
+            block[i] = arotat;
         }
     }
 }

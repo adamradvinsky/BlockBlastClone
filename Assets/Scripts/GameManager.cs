@@ -15,13 +15,18 @@ public class GameManager : MonoBehaviour
     public List<GameObject> blocks = new List<GameObject>();
 
 
-    public List<GameObject> inGameBlocks = new List<GameObject>();
+    private List<GameObject> inGameBlocks = new List<GameObject>();
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         addShapes();
+    }
+
+    public List<GameObject> getInGameBlocks()
+    {
+        return inGameBlocks;
     }
 
     public void shapeCountDecrease()

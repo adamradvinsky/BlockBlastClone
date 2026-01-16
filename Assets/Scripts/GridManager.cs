@@ -198,13 +198,28 @@ public class GridManager : MonoBehaviour
     }
 
 
-    // public void checkForLoss(Vector2Int gridPos, )
-    // {
-    //     foreach (var item in collection)
-    //     {
+    public void checkForLoss()
+    {
+        List<GameObject> list = gameMan.getInGameBlocks();
+        foreach (var a in list)
+        {
+            Vector2Int[] b = a.GetComponent<shape>().block;
             
-    //     }
-    // }
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (CanPlace(new Vector2Int(i,j), b))
+                    {
+                        //Debug.Log("can place at " + i +  " : " + j + " using " + a.name);
+                        return;
+                    }
+                }
+            }
+        }
+
+        Debug.Log("you lost");
+    }
 
 
 
