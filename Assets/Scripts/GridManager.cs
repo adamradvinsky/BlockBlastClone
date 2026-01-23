@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
+using System.Collections;
 public class GridManager : MonoBehaviour
 {
     public int width = 8;
@@ -101,7 +102,7 @@ public class GridManager : MonoBehaviour
                 highlightGrid[p.x, p.y] = 1;
             }
 
-            
+
             // check if can clear 
             // then add those to what to highlight
 
@@ -252,7 +253,7 @@ public class GridManager : MonoBehaviour
                 Debug.Log("collumn " + i + " is a clear");
             }
         }
-        clearColRow(rows, colls);
+        StartCoroutine(ClearColRow(rows, colls));
     }
 
 
@@ -283,14 +284,17 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
-    private void clearColRow(List<int> rows, List<int> colls)
+    public IEnumerator ClearColRow(List<int> rows, List<int> colls)
     {
+
+        yield return new WaitForSeconds((float)0.2);
         foreach (int a in rows)
         {
             for (int i = 0; i < 8; i++)
             {
                 grid[i, a] = 0;
                 highlightGrid[i, a] = 0;
+                tiles[i, a].settoClear();
                 tiles[i, a].setToEmpty();
                 tiles[i, a].setToNotHover();
                 tiles[i, a].setToNotClearHover();
@@ -308,6 +312,8 @@ public class GridManager : MonoBehaviour
                 tiles[a, i].setToNotClearHover();
             }
         }
+
+        yield return null;
     }
 
 

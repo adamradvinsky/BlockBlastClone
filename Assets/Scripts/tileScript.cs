@@ -51,6 +51,11 @@ public class TileScript : MonoBehaviour
         anim.SetBool("hover", true);
     }
 
+    public void settoClear()
+    {
+        anim.SetTrigger("clear");
+    }
+
 
     public void setToNotHover()
     {
