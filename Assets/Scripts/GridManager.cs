@@ -8,6 +8,7 @@ public class GridManager : MonoBehaviour
     public int width = 8;
     public int height = 8;
 
+    public bool lose = false;
     public GameObject tilePrefab;
 
     public int[,] grid;
@@ -76,7 +77,7 @@ public class GridManager : MonoBehaviour
 
 
     // Called while dragging
-    public void Hover(Vector2Int gridPos, Vector2Int[] shape)
+    public void Hover(Vector2Int gridPos, Vector2Int[] shape, Color color)
     {
 
         if (gridPos == prevHover)
@@ -90,7 +91,6 @@ public class GridManager : MonoBehaviour
 
         activeShape = shape;
         bool canPlace = CanPlace(gridPos, shape);
-        Color color;
 
 
         if (canPlace)
@@ -101,7 +101,7 @@ public class GridManager : MonoBehaviour
                 highlightGrid[p.x, p.y] = 1;
             }
 
-            color = Color.green;
+            
             // check if can clear 
             // then add those to what to highlight
 
@@ -143,7 +143,7 @@ public class GridManager : MonoBehaviour
             if (!InBounds(p)) continue;
             if (grid[p.x, p.y] != 0) continue;
 
-            tiles[p.x, p.y].setToHover();
+            tiles[p.x, p.y].setToHover(color);
         }
     }
 
@@ -170,7 +170,7 @@ public class GridManager : MonoBehaviour
 
 
     // Called on mouse release
-    public bool Place(Vector2Int gridPos)
+    public bool Place(Vector2Int gridPos, Color color)
     {
         if (!CanPlace(gridPos, activeShape))
             return false;
@@ -182,7 +182,7 @@ public class GridManager : MonoBehaviour
 
             grid[p.x, p.y] = 1;
             highlightGrid[p.x, p.y] = 1;
-            tiles[p.x, p.y].setToFill();
+            tiles[p.x, p.y].setToFill(color);
             tiles[p.x, p.y].setToNotHover();
         }
 
@@ -221,7 +221,7 @@ public class GridManager : MonoBehaviour
 
 
 
-        gameMan.StartCoroutine(gameMan.Lose());
+        lose = true;
     }
 
 

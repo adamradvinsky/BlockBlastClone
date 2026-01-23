@@ -75,7 +75,9 @@ public class GameManager : MonoBehaviour
             GameObject newBlock = Instantiate(blocks[random], transform);
             newBlock.transform.position = startPositions[i].transform.position;
 
+
             inGameBlocks.Add(newBlock);
+            //newBlock.transform.localScale = new Vector3(transform.localScale.x / 2, transform.localScale.y / 2, transform.localScale.z);
         }
 
     }
@@ -95,9 +97,11 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator Lose()
     {
+
+        yield return new WaitForSeconds((float)0.2);
         Debug.Log("you lost");
         screen.GetComponent<Animator>().SetTrigger("lost");
-        yield return new WaitForSeconds((float) 0.5);
+        yield return new WaitForSeconds((float)0.5);
         lose_Screen.SetActive(true);
         yield return null;
     }

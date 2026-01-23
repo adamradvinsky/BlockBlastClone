@@ -25,7 +25,7 @@ public class TileScript : MonoBehaviour
         sr.color = c;
     }
 
-    
+
 
     public void setToEmpty()
     {
@@ -33,19 +33,21 @@ public class TileScript : MonoBehaviour
         anim.SetBool("fill", false);
     }
 
-    public void setToFill()
+    public void setToFill(Color colour)
     {
         //sr.sprite = fillSprite;
-        
+
+        this.transform.Find("Square").GetComponent<SpriteRenderer>().color = colour;
         anim.SetBool("fill", true);
 
 
     }
 
-    public void setToHover()
+    public void setToHover(Color colour)
     {
         //sr.sprite = fillSprite;
-        
+
+        this.transform.Find("Square").GetComponent<SpriteRenderer>().color = Color.gray;
         anim.SetBool("hover", true);
     }
 
@@ -53,21 +55,21 @@ public class TileScript : MonoBehaviour
     public void setToNotHover()
     {
         //sr.sprite = fillSprite;
-        
+
         anim.SetBool("hover", false);
     }
 
     public void setToClearHover()
     {
         //sr.sprite = fillSprite;
-        
+
         anim.SetBool("clearhover", true);
     }
 
     public void setToNotClearHover()
     {
         //sr.sprite = fillSprite;
-        
+
         anim.SetBool("clearhover", false);
     }
 

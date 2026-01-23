@@ -28,7 +28,15 @@ public class shape : MonoBehaviour
     };
 
     public Vector2Int[] finalBlock;
-    public List<Color> colours = new List<Color> { };
+    private List<Color> colours = new List<Color>
+    {
+        Color.red,
+        Color.blue,
+        Color.yellow,
+        Color.green,
+        Color.pink
+    };
+
 
 
     void Awake()
@@ -40,8 +48,8 @@ public class shape : MonoBehaviour
 
         //flip(block);
         int colourNum = UnityEngine.Random.Range(0, colours.Count - 1);
-        color = colours[colourNum];
         color = Color.red;
+        color = colours[colourNum];
 
     }
 
@@ -63,12 +71,21 @@ public class shape : MonoBehaviour
         snapPos = transform.position;
         gridOrigin = grid.tiles[0, 0].transform.position;
 
+
+        setUp(tileSize);
+
+        //transform.localScale = new Vector3(transform.localScale.x / 2, transform.localScale.y / 2, transform.localScale.z);
+
+    }
+
+
+
+    private void setUp(float scale)
+    {
         BoxCollider2D badbox = gameObject.GetComponent<BoxCollider2D>();
         Destroy(badbox);
 
         BoxCollider2D boxCol = gameObject.AddComponent<BoxCollider2D>();
-
-
 
         int xR = 0;
         int xL = 0;
@@ -107,13 +124,19 @@ public class shape : MonoBehaviour
         t.transform.Find("Square").GetComponent<SpriteRenderer>().color = colour;
     }
 
+    void OnMouseDown()
+    {
+        //transform.localScale = new Vector3(transform.localScale.x * 2, transform.localScale.y * 2, transform.localScale.z);
+
+    }
+
     void OnMouseDrag()
     {
         Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = new Vector3(mouse.x, mouse.y, -5);
 
         Vector2Int gridPos = WorldToGrid(mouse);
-        grid.Hover(gridPos, finalBlock);
+        grid.Hover(gridPos, finalBlock, color);
     }
 
     void OnMouseUp()
@@ -125,7 +148,7 @@ public class shape : MonoBehaviour
 
         if (grid.CanPlace(gridPos, finalBlock))
         {
-            grid.Place(gridPos);
+            grid.Place(gridPos, color);
             gameMan.removeBlockFromGame(this.gameObject);
             grid.checkForLoss();
 
@@ -133,7 +156,16 @@ public class shape : MonoBehaviour
         }
         else
         {
-            transform.position = snapPos;
+                //transform.localScale = new Vector3(transform.localScale.x / 2, transform.localScale.y / 2, transform.localScale.z);
+
+
+                transform.position = snapPos;
+
+            if (grid.lose)
+            {
+                gameMan.StartCoroutine(gameMan.Lose());
+            }
+
         }
     }
 
