@@ -3,11 +3,17 @@ using UnityEngine;
 
 using System.Collections.Generic;
 using Unity.Mathematics;
+using TMPro.EditorUtilities;
+using Unity.VisualScripting;
+using Microsoft.Unity.VisualStudio.Editor;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
 
     public TMP_Text scoreText;
+    public GameObject screen;
+    public GameObject lose_Screen;
     private int score;
     private int shapeCount = 3;
 
@@ -79,9 +85,21 @@ public class GameManager : MonoBehaviour
         inGameBlocks.Remove(block);
     }
 
-    public void lose()
-    {
+    // public void lose()
+    // {
+    //     Debug.Log("you lost");
+    //     screen.GetComponent<Animator>().SetTrigger("lost");
+    //     lose_Screen.SetActive(true);
+    //     // set lose screen to active
+    // }
 
+    public IEnumerator Lose()
+    {
+        Debug.Log("you lost");
+        screen.GetComponent<Animator>().SetTrigger("lost");
+        yield return new WaitForSeconds((float) 0.5);
+        lose_Screen.SetActive(true);
+        yield return null;
     }
 
 

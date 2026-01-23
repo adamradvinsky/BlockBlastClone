@@ -25,17 +25,18 @@ public class GridManager : MonoBehaviour
 
     private List<int> rowClear;
     private List<int> colClear;
+    public Animator bruh;
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
-            tiles[0, 0].setToFill();
+            gameMan.StartCoroutine(gameMan.Lose());
         }
 
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            tiles[0, 0].setToEmpty();
+            bruh.SetBool("lost", false);
         }
     }
 
@@ -203,13 +204,13 @@ public class GridManager : MonoBehaviour
         List<GameObject> list = gameMan.getInGameBlocks();
         foreach (var a in list)
         {
-            Vector2Int[] b = a.GetComponent<shape>().block;
-            
+            Vector2Int[] b = a.GetComponent<shape>().finalBlock;
+
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (CanPlace(new Vector2Int(i,j), b))
+                    if (CanPlace(new Vector2Int(i, j), b))
                     {
                         //Debug.Log("can place at " + i +  " : " + j + " using " + a.name);
                         return;
@@ -218,7 +219,9 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        Debug.Log("you lost");
+
+
+        gameMan.StartCoroutine(gameMan.Lose());
     }
 
 
@@ -251,7 +254,7 @@ public class GridManager : MonoBehaviour
         }
         clearColRow(rows, colls);
     }
-    
+
 
     private bool checkRow(int a, int[,] grid)
     {
@@ -358,7 +361,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    bool CanPlace(Vector2Int gridPos, Vector2Int[] shape)
+    public bool CanPlace(Vector2Int gridPos, Vector2Int[] shape)
     {
         foreach (Vector2Int offset in shape)
         {

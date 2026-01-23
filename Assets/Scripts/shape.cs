@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -17,6 +19,7 @@ public class shape : MonoBehaviour
 
     public GameManager gameMan;
     private Vector2 snapPos;
+    private Color color = Color.blue;
 
     public Vector2Int[] block = new Vector2Int[]
     {
@@ -25,7 +28,7 @@ public class shape : MonoBehaviour
     };
 
     public Vector2Int[] finalBlock;
-    public Vector2Int[] rotatedBlock;
+    public List<Color> colours = new List<Color> { };
 
 
     void Awake()
@@ -36,13 +39,17 @@ public class shape : MonoBehaviour
         flip(finalBlock);
 
         //flip(block);
+        int colourNum = UnityEngine.Random.Range(0, colours.Count - 1);
+        color = colours[colourNum];
+        color = Color.red;
+
     }
 
     private void copyArray(Vector2Int[] a, Vector2Int[] b)
     {
         for (int i = 0; i < b.Length; i++)
         {
-            
+
             a[i] = b[i];
         }
     }
@@ -51,7 +58,7 @@ public class shape : MonoBehaviour
     void Start()
     {
 
-        
+
         tileSize = grid.tileScale;
         snapPos = transform.position;
         gridOrigin = grid.tiles[0, 0].transform.position;
@@ -73,6 +80,7 @@ public class shape : MonoBehaviour
         foreach (var pos in finalBlock)
         {
             GameObject t = Instantiate(prefabBlock, transform);
+            setColour(t, color);
             Vector3 newPos = transform.position + new Vector3(pos.x * tileSize, pos.y * tileSize, transform.position.y);
             t.transform.position = newPos;
 
@@ -93,6 +101,12 @@ public class shape : MonoBehaviour
 
     }
 
+    private void setColour(GameObject t, Color colour)
+    {
+
+        t.transform.Find("Square").GetComponent<SpriteRenderer>().color = colour;
+    }
+
     void OnMouseDrag()
     {
         Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -107,13 +121,15 @@ public class shape : MonoBehaviour
         Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int gridPos = WorldToGrid(mouse);
 
-        if (grid.Place(gridPos))
+
+
+        if (grid.CanPlace(gridPos, finalBlock))
         {
+            grid.Place(gridPos);
             gameMan.removeBlockFromGame(this.gameObject);
             grid.checkForLoss();
-            
-            Destroy(this.gameObject);
 
+            Destroy(this.gameObject);
         }
         else
         {
@@ -142,9 +158,6 @@ public class shape : MonoBehaviour
 
     public void flip(Vector2Int[] ablock)
     {
-
-
-        Debug.Log("bleh");
         for (int i = 0; i < block.Length; i++)
         {
             Vector2Int arotat = new Vector2Int(-ablock[i].x, -ablock[i].y);
