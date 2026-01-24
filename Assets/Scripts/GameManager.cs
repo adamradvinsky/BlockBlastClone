@@ -52,10 +52,13 @@ public class GameManager : MonoBehaviour
     public IEnumerator addScore(int add)
     {
         int newScore = score + add;
+        float time = 0;
         while (score < newScore)
         {
-        yield return new WaitForSeconds((float)0.2);
-            score += 3;
+        yield return new WaitForSeconds((float)0.1);
+            time += 0.03f;
+            float bruh = add*scoreCurve.Evaluate(time);
+            score += (int)bruh;
             updateScore();
         }
         yield return null;
@@ -64,7 +67,7 @@ public class GameManager : MonoBehaviour
 
     public void updateScore()
     {
-        
+
         scoreText.text = score.ToString();
     }
 

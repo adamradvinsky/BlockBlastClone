@@ -153,8 +153,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -751, y: 454}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -768.41, y: 343.77}
+  m_SizeDelta: {x: 165.2, y: 270.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &99845613
 MonoBehaviour:
@@ -178,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 352d8eb3eee77994f8bd3b0d1bdd1826, type: 2}
+  m_sharedMaterial: {fileID: -8107764031957784727, guid: 352d8eb3eee77994f8bd3b0d1bdd1826, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -198,13 +198,13 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
+  m_TextStyleHashCode: 2426
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 217.34
+  m_fontSizeBase: 217.34
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 1.6394043, y: 0, z: 0, w: 0}
+  m_margin: {x: 1.6394043, y: 0, z: -899.2492, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -323,7 +323,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.9433962, g: 0.45834818, b: 0.45834818, a: 1}
+  m_Color: {r: 0.28629097, g: 0.24862051, b: 0.3490566, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -546,8 +546,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::shape
   grid: {fileID: 326267047}
+  gridOrigin: {x: 0, y: 0}
   prefabBlock: {fileID: 2141818150}
   gameMan: {fileID: 1298406602}
+  colourshape: {r: 0, g: 0, b: 0, a: 0}
   block:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
@@ -555,6 +557,7 @@ MonoBehaviour:
   - {x: 0, y: 1}
   - {x: 0, y: -1}
   finalBlock: []
+  gridPos: {x: 0, y: 0}
 --- !u!4 &303138636
 Transform:
   m_ObjectHideFlags: 0
@@ -662,14 +665,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::shape
   grid: {fileID: 326267047}
+  gridOrigin: {x: 0, y: 0}
   prefabBlock: {fileID: 2141818150}
   gameMan: {fileID: 1298406602}
+  colourshape: {r: 0, g: 0, b: 0, a: 0}
   block:
   - {x: 0, y: 0}
   - {x: 0, y: 1}
   - {x: 0, y: 2}
   - {x: 0, y: 3}
   finalBlock: []
+  gridPos: {x: 0, y: 0}
 --- !u!1 &326267044
 GameObject:
   m_ObjectHideFlags: 0
@@ -1348,12 +1354,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::shape
   grid: {fileID: 326267047}
+  gridOrigin: {x: 0, y: 0}
   prefabBlock: {fileID: 2141818150}
   gameMan: {fileID: 1298406602}
+  colourshape: {r: 0, g: 0, b: 0, a: 0}
   block:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
   finalBlock: []
+  gridPos: {x: 0, y: 0}
 --- !u!61 &967218791
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1617,6 +1626,30 @@ MonoBehaviour:
   - {fileID: 1512760127}
   - {fileID: 325103654}
   - {fileID: 1777003594}
+  scoreCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   startPositions:
   - {fileID: 1376785639}
   - {fileID: 541636707}
@@ -1716,14 +1749,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::shape
   grid: {fileID: 326267047}
+  gridOrigin: {x: 0, y: 0}
   prefabBlock: {fileID: 2141818150}
   gameMan: {fileID: 1298406602}
+  colourshape: {r: 0, g: 0, b: 0, a: 0}
   block:
   - {x: 0, y: 0}
   - {x: 0, y: 1}
   - {x: 0, y: 2}
   - {x: 1, y: 2}
   finalBlock: []
+  gridPos: {x: 0, y: 0}
 --- !u!4 &1317776672
 Transform:
   m_ObjectHideFlags: 0
@@ -1847,8 +1883,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::shape
   grid: {fileID: 326267047}
+  gridOrigin: {x: 0, y: 0}
   prefabBlock: {fileID: 2141818150}
   gameMan: {fileID: 1298406602}
+  colourshape: {r: 0, g: 0, b: 0, a: 0}
   block:
   - {x: 0, y: 0}
   - {x: 0, y: 1}
@@ -1856,6 +1894,7 @@ MonoBehaviour:
   - {x: 1, y: 2}
   - {x: 2, y: 2}
   finalBlock: []
+  gridPos: {x: 0, y: 0}
 --- !u!4 &1512760130
 Transform:
   m_ObjectHideFlags: 0
@@ -2039,14 +2078,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::shape
   grid: {fileID: 326267047}
+  gridOrigin: {x: 0, y: 0}
   prefabBlock: {fileID: 2141818150}
   gameMan: {fileID: 1298406602}
+  colourshape: {r: 0, g: 0, b: 0, a: 0}
   block:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
   - {x: 2, y: 0}
   - {x: 3, y: 0}
   finalBlock: []
+  gridPos: {x: 0, y: 0}
 --- !u!1 &1813368585
 GameObject:
   m_ObjectHideFlags: 0

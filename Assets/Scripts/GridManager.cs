@@ -90,8 +90,11 @@ public class GridManager : MonoBehaviour
         ClearHoverRC(rowClear, colClear);
         ClearHover(prevHover, shape);
 
-        rowClear = new List<int> { };
-        colClear = new List<int> { };
+        if (rowClear == null) rowClear = new List<int>();
+        if (colClear == null) colClear = new List<int>();
+
+        rowClear.Clear();
+        colClear.Clear();
 
         activeShape = shape;
         bool canPlace = CanPlace(gridPos, shape);
@@ -197,6 +200,7 @@ public class GridManager : MonoBehaviour
 
 
 
+        ClearHover(prevHover, activeShape);
         checkAClear();
         gameMan.removeBlockFromGame(gameObject);
         checkForLoss();

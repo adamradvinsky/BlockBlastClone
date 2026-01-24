@@ -19,7 +19,8 @@ public class shape : MonoBehaviour
 
     public GameManager gameMan;
     private Vector2 snapPos;
-    private Color color = Color.blue;
+    public Color colourshape;
+    Camera cam;
 
     public Vector2Int[] block = new Vector2Int[]
     {
@@ -38,18 +39,18 @@ public class shape : MonoBehaviour
     };
 
 
-
     void Awake()
     {
+        cam = Camera.main;
         finalBlock = new Vector2Int[block.Length];
 
         copyArray(finalBlock, block);
         flip(finalBlock);
 
         //flip(block);
-        int colourNum = UnityEngine.Random.Range(0, colours.Count - 1);
-        color = Color.red;
-        color = colours[colourNum];
+        int colourNum = UnityEngine.Random.Range(0, colours.Count);
+        //color = Color.red;
+        colourshape = colours[colourNum];
 
     }
 
@@ -97,7 +98,7 @@ public class shape : MonoBehaviour
         foreach (var pos in finalBlock)
         {
             GameObject t = Instantiate(prefabBlock, transform);
-            setColour(t, color);
+            setColour(t, colourshape);
             Vector3 newPos = transform.position + new Vector3(pos.x * tileSize, pos.y * tileSize, transform.position.y);
             t.transform.position = newPos;
 
@@ -118,10 +119,10 @@ public class shape : MonoBehaviour
 
     }
 
-    private void setColour(GameObject t, Color colour)
+    private void setColour(GameObject t, Color coloursh)
     {
 
-        t.transform.Find("Square").GetComponent<SpriteRenderer>().color = colour;
+        t.transform.Find("Square").GetComponent<SpriteRenderer>().color = coloursh;
     }
 
     void OnMouseDown()
@@ -130,14 +131,14 @@ public class shape : MonoBehaviour
 
     }
 
-    public Vector2Int gridPos = new Vector2Int(0,0);
+    public Vector2Int gridPos = new Vector2Int(0, 0);
     void OnMouseDrag()
     {
-        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mouse = cam.ScreenToWorldPoint(Input.mousePosition);
         transform.position = new Vector3(mouse.x, mouse.y, -5);
 
         gridPos = WorldToGrid(mouse);
-        grid.Hover(gridPos, finalBlock, color);
+        grid.Hover(gridPos, finalBlock, colourshape);
     }
 
     void OnMouseUp()
@@ -149,7 +150,7 @@ public class shape : MonoBehaviour
 
         if (grid.CanPlace(gridPos, finalBlock))
         {
-            grid.Place(gridPos, color, this.gameObject);
+            grid.Place(gridPos, colourshape, this.gameObject);
 
             //gameMan.removeBlockFromGame(this.gameObject);
             //grid.checkForLoss();
