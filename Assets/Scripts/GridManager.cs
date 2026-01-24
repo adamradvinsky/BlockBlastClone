@@ -81,9 +81,12 @@ public class GridManager : MonoBehaviour
     public void Hover(Vector2Int gridPos, Vector2Int[] shape, Color color)
     {
 
-        if (gridPos == prevHover)
-            return;
+        // if (gridPos == prevHover)
+        // {
+        //     Debug.Log("prev");
 
+        //     return;
+        // }
         ClearHoverRC(rowClear, colClear);
         ClearHover(prevHover, shape);
 
@@ -171,10 +174,10 @@ public class GridManager : MonoBehaviour
 
 
     // Called on mouse release
-    public bool Place(Vector2Int gridPos, Color color)
+    public void Place(Vector2Int gridPos, Color color, GameObject gameObject)
     {
         if (!CanPlace(gridPos, activeShape))
-            return false;
+            return;
 
         foreach (Vector2Int offset in activeShape)
         {
@@ -187,16 +190,18 @@ public class GridManager : MonoBehaviour
             tiles[p.x, p.y].setToNotHover();
         }
 
-        ClearHover(prevHover, activeShape);
+        //ClearHover(prevHover, activeShape);
         // ADD SCORE
-        gameMan.addScore(30);
+        StartCoroutine(gameMan.addScore(30));
         gameMan.shapeCountDecrease();
 
 
 
         checkAClear();
+        gameMan.removeBlockFromGame(gameObject);
+        checkForLoss();
+        Destroy(gameObject);
 
-        return true;
     }
 
 
@@ -213,14 +218,11 @@ public class GridManager : MonoBehaviour
                 {
                     if (CanPlace(new Vector2Int(i, j), b))
                     {
-                        //Debug.Log("can place at " + i +  " : " + j + " using " + a.name);
                         return;
                     }
                 }
             }
         }
-
-
 
         lose = true;
     }
@@ -287,7 +289,6 @@ public class GridManager : MonoBehaviour
     public IEnumerator ClearColRow(List<int> rows, List<int> colls)
     {
 
-        yield return new WaitForSeconds((float)0.2);
         foreach (int a in rows)
         {
             for (int i = 0; i < 8; i++)
@@ -307,6 +308,7 @@ public class GridManager : MonoBehaviour
             {
                 grid[a, i] = 0;
                 highlightGrid[a, i] = 0;
+                tiles[a, i].settoClear();
                 tiles[a, i].setToEmpty();
                 tiles[a, i].setToNotHover();
                 tiles[a, i].setToNotClearHover();

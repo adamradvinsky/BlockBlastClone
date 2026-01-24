@@ -13,7 +13,7 @@ public class shape : MonoBehaviour
     public GridManager grid;
 
     private float tileSize;
-    private Vector2 gridOrigin;
+    public Vector2 gridOrigin;
     public GameObject prefabBlock;
 
 
@@ -130,12 +130,13 @@ public class shape : MonoBehaviour
 
     }
 
+    public Vector2Int gridPos = new Vector2Int(0,0);
     void OnMouseDrag()
     {
         Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = new Vector3(mouse.x, mouse.y, -5);
 
-        Vector2Int gridPos = WorldToGrid(mouse);
+        gridPos = WorldToGrid(mouse);
         grid.Hover(gridPos, finalBlock, color);
     }
 
@@ -148,18 +149,18 @@ public class shape : MonoBehaviour
 
         if (grid.CanPlace(gridPos, finalBlock))
         {
-            grid.Place(gridPos, color);
-            gameMan.removeBlockFromGame(this.gameObject);
-            grid.checkForLoss();
+            grid.Place(gridPos, color, this.gameObject);
 
-            Destroy(this.gameObject);
+            //gameMan.removeBlockFromGame(this.gameObject);
+            //grid.checkForLoss();
+
+            //Destroy(this.gameObject);
         }
         else
         {
-                //transform.localScale = new Vector3(transform.localScale.x / 2, transform.localScale.y / 2, transform.localScale.z);
+            //transform.localScale = new Vector3(transform.localScale.x / 2, transform.localScale.y / 2, transform.localScale.z);
 
-
-                transform.position = snapPos;
+            transform.position = snapPos;
 
             if (grid.lose)
             {

@@ -45,17 +45,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public AnimationCurve scoreCurve;
 
 
-    public void addScore(int add)
+
+    public IEnumerator addScore(int add)
     {
-        score += add;
-        updateScore();
+        int newScore = score + add;
+        while (score < newScore)
+        {
+        yield return new WaitForSeconds((float)0.2);
+            score += 3;
+            updateScore();
+        }
+        yield return null;
     }
 
 
     public void updateScore()
     {
+        
         scoreText.text = score.ToString();
     }
 
