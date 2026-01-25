@@ -38,7 +38,8 @@ public class GridManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            bruh.SetBool("lost", false);
+
+            gameMan.StartCoroutine(gameMan.PlayAgain());
         }
     }
 
@@ -322,6 +323,20 @@ public class GridManager : MonoBehaviour
         yield return null;
     }
 
+
+    public void resetBoard()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                highlightGrid[i, j] = 0;
+                grid[i, j] = 0;
+                tiles[i, j].setToNotHover();
+                tiles[i, j].setToEmpty();
+            }
+        }
+    }
 
 
     void ClearHover(Vector2Int gridPos, Vector2Int[] shape)
