@@ -51,6 +51,9 @@ public class shape : MonoBehaviour
         int colourNum = UnityEngine.Random.Range(0, colours.Count);
         //color = Color.red;
         colourshape = colours[colourNum];
+        GameObject gameManagerGO = GameObject.FindWithTag("GameManager");
+        gameMan = gameManagerGO.GetComponent<GameManager>();
+
 
     }
 
@@ -151,11 +154,6 @@ public class shape : MonoBehaviour
         if (grid.CanPlace(gridPos, finalBlock))
         {
             grid.Place(gridPos, colourshape, this.gameObject);
-
-            //gameMan.removeBlockFromGame(this.gameObject);
-            //grid.checkForLoss();
-
-            //Destroy(this.gameObject);
         }
         else
         {

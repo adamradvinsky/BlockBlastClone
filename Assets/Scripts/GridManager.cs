@@ -27,7 +27,6 @@ public class GridManager : MonoBehaviour
 
     private List<int> rowClear;
     private List<int> colClear;
-    public Animator bruh;
 
     public void Update()
     {
@@ -43,9 +42,20 @@ public class GridManager : MonoBehaviour
         }
     }
 
-
-    void Awake()
+    void Start()
     {
+        GameObject gameManagerGO = GameObject.FindWithTag("GameManager");
+        gameMan = gameManagerGO.GetComponent<GameManager>();
+        
+
+    }
+
+
+    public void setUpGrid()
+    {
+
+
+
 
         startPos = transform.position;
         grid = new int[width, height];
@@ -404,4 +414,6 @@ public class GridManager : MonoBehaviour
     {
         return p.x >= 0 && p.y >= 0 && p.x < width && p.y < height;
     }
+
+    
 }
