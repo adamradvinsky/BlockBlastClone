@@ -115,6 +115,7 @@ public class GameManager : MonoBehaviour
     public void addShapes()
     {
         int random = 0;
+        Debug.Log(blocks.Count);
         for (int i = 0; i < 3; i++)
         {
             random = UnityEngine.Random.Range(0, blocks.Count);
@@ -153,6 +154,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds((float)0.2);
         Debug.Log("playing again");
+        gridMan.lose = false;
         // reset board and score
         gridMan.resetBoard();
         score = 0;

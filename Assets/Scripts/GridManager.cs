@@ -39,6 +39,7 @@ public class GridManager : MonoBehaviour
         {
 
             gameMan.StartCoroutine(gameMan.PlayAgain());
+            lose = false;
         }
     }
 
@@ -53,10 +54,6 @@ public class GridManager : MonoBehaviour
 
     public void setUpGrid()
     {
-
-
-
-
         startPos = transform.position;
         grid = new int[width, height];
 
@@ -91,13 +88,6 @@ public class GridManager : MonoBehaviour
     // Called while dragging
     public void Hover(Vector2Int gridPos, Vector2Int[] shape, Color color)
     {
-
-        // if (gridPos == prevHover)
-        // {
-        //     Debug.Log("prev");
-
-        //     return;
-        // }
         ClearHoverRC(rowClear, colClear);
         ClearHover(prevHover, shape);
 
@@ -118,10 +108,6 @@ public class GridManager : MonoBehaviour
                 Vector2Int p = gridPos + offset;
                 highlightGrid[p.x, p.y] = 1;
             }
-
-
-            // check if can clear 
-            // then add those to what to highlight
 
 
             foreach (var pos in shape)
@@ -204,8 +190,6 @@ public class GridManager : MonoBehaviour
             tiles[p.x, p.y].setToNotHover();
         }
 
-        //ClearHover(prevHover, activeShape);
-        // ADD SCORE
         StartCoroutine(gameMan.addScore(30));
         gameMan.shapeCountDecrease();
 
@@ -329,6 +313,8 @@ public class GridManager : MonoBehaviour
                 tiles[a, i].setToNotClearHover();
             }
         }
+
+        StartCoroutine(gameMan.addScore(100));
 
         yield return null;
     }

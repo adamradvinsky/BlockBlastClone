@@ -45,11 +45,19 @@ public class shape : MonoBehaviour
         finalBlock = new Vector2Int[block.Length];
 
         copyArray(finalBlock, block);
-        flip(finalBlock);
 
-        //flip(block);
+        int a = UnityEngine.Random.Range(0, 2);
+        int b = UnityEngine.Random.Range(0, 2);
+        if (a == 1)
+        {
+            flip(finalBlock);
+        }
+        if (b == 1)
+        {
+            rotate(finalBlock);
+        }
+
         int colourNum = UnityEngine.Random.Range(0, colours.Count);
-        //color = Color.red;
         colourshape = colours[colourNum];
         GameObject gameManagerGO = GameObject.FindWithTag("GameManager");
         gameMan = gameManagerGO.GetComponent<GameManager>();
@@ -78,7 +86,7 @@ public class shape : MonoBehaviour
 
         setUp(tileSize);
 
-        //transform.localScale = new Vector3(transform.localScale.x / 2, transform.localScale.y / 2, transform.localScale.z);
+        transform.localScale = new Vector3(transform.localScale.x / 2, transform.localScale.y / 2, transform.localScale.z);
 
     }
 
@@ -130,7 +138,7 @@ public class shape : MonoBehaviour
 
     void OnMouseDown()
     {
-        //transform.localScale = new Vector3(transform.localScale.x * 2, transform.localScale.y * 2, transform.localScale.z);
+        transform.localScale = new Vector3(transform.localScale.x * 2, transform.localScale.y * 2, transform.localScale.z);
 
     }
 
@@ -157,7 +165,7 @@ public class shape : MonoBehaviour
         }
         else
         {
-            //transform.localScale = new Vector3(transform.localScale.x / 2, transform.localScale.y / 2, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x / 2, transform.localScale.y / 2, transform.localScale.z);
 
             transform.position = snapPos;
 
@@ -184,7 +192,7 @@ public class shape : MonoBehaviour
         for (int i = 0; i < ablock.Length; i++)
         {
             Vector2Int arotat = new Vector2Int(ablock[i].y, -ablock[i].x);
-            this.block[i] = arotat;
+            ablock[i] = arotat;
         }
     }
 
